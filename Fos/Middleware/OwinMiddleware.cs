@@ -40,11 +40,15 @@ namespace Fos.Owin
 				try
 				{
 					// filtered by matching all with Args type(except null Args)
-					ctor = MiddlewareType.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(c => c.GetParameters().Length >= 1 && c.GetParameters().Length - 1 <= Args.Length).OrderByDescending(c => c.GetParameters().Length)
-						.Where((ct)=>{
-							return ct.GetParameters().Skip(1).Zip(Args,(pinfo,arg)=>(arg==null)||(pinfo.ParameterType == arg.GetType()))
-								.All(b=>b);
-						}).First();
+					ctor = MiddlewareType
+						.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+						.Where(c => c.GetParameters().Length >= 1 && c.GetParameters().Length - 1 <= Args.Length)
+						.OrderByDescending(c => c.GetParameters().Length)
+						.First(ct => ct
+							.GetParameters()
+							.Skip(1)
+							.Zip(Args, (pinfo, arg) => (arg == null) || pinfo.ParameterType.IsInstanceOfType(arg))
+							.All(b => b));
 				}
 				catch
 				{
