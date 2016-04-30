@@ -1,83 +1,107 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Owin;
+//using System;
+//using System.Collections.Generic;
+//using System.Threading;
+//using System.Threading.Tasks;
+//using Owin;
 
-namespace Fos.Owin
-{
-	internal class FosAppBuilder : IAppBuilder
-	{
-		private Dictionary<string, object> properties;
+//namespace Fos.Owin
+//{
+//    using Logging;
+//    using Microsoft.Owin;
+//    using Middleware;
+//    using OwinMiddleware = Middleware.OwinMiddleware;
 
-		public CancellationToken OnAppDisposing { get; private set; }
+//    internal class FosAppBuilder : IAppBuilder
+//    {
+//        private readonly IServerLogger _logger;
+//        private readonly Dictionary<string, object> _properties;
 
-		private FosOwinRoot RootMiddleware;
+//        public CancellationToken OnAppDisposing { get; }
 
-		/// <summary>
-		/// This is the last middleware added through <see cref="Use"/>, or the <see cref="RootMiddleWare"/> in case <see cref="Use"/> has not been called yet.
-		/// </summary>
-		private OwinMiddleware LastMiddleware;
+//        private readonly FosOwinRoot _rootMiddleware;
 
-		public FosAppBuilder(CancellationToken cancelToken)
-		{
-			properties = new Dictionary<string, object>();
-			RootMiddleware = new FosOwinRoot();
+//        /// <summary>
+//        /// This is the last middleware added through <see cref="Use"/>, or the <see cref="_rootMiddleWare"/> in case <see cref="Use"/> has not been called yet.
+//        /// </summary>
+//        private OwinMiddleware _lastMiddleware;
+//        private static readonly Action<Delegate> MiddlewareBaseTypeConversion =
+//            d =>
+//            {
+//                //Log.CurrentLogger.Debug()("Type: ", d.GetType());
+//            };
 
-			//WARN: Non standard Owin header. Used by Nancy
-			OnAppDisposing = cancelToken;
-			properties.Add("host.OnAppDisposing", cancelToken);
-		}
+//        public FosAppBuilder(CancellationToken cancelToken, IServerLogger logger)
+//        {
+//            if (logger == null)
+//            {
+//                logger = new NullLogger();
+//            }
 
-		public IAppBuilder Use(object middleware, params object[] args)
-		{
-			Delegate delegateMiddleware = middleware as Delegate;
-			OwinMiddleware newMiddleware;
-			if (delegateMiddleware != null)
-			{
-				newMiddleware = new OwinMiddleware(delegateMiddleware, args);
-			}
-			else
-			{
-				Type typeMiddleware = middleware as Type;
+//            _logger = logger;
+//            _properties = new Dictionary<string, object>();
+//            _rootMiddleware = new FosOwinRoot();
 
-				if (typeMiddleware != null)
-					newMiddleware = new OwinMiddleware(typeMiddleware, args);
-				else
-					throw new ArgumentException("The middleware to be used needs either to be a Type or a Delegate");
-			}
+//            //WARN: Non standard Owin header. Used by Nancy
+//            OnAppDisposing = cancelToken;
+//            _properties.Add("host.OnAppDisposing", cancelToken);
 
-			// Update the chain of middleware
-			if (LastMiddleware == null)
-				RootMiddleware.Next = newMiddleware;
-			else
-				LastMiddleware.Next = newMiddleware;
+//            _properties.Add("builder.AddSignatureConversion", MiddlewareBaseTypeConversion);
+//        }
 
-			LastMiddleware = newMiddleware;
+//        public IAppBuilder Use(object middleware, params object[] args)
+//        {
+//            var delegateMiddleware = middleware as Delegate;
+//            OwinMiddleware newMiddleware;
+//            if (delegateMiddleware != null)
+//            {
+//                newMiddleware = new OwinMiddleware(delegateMiddleware, _logger, args);
+//            }
+//            else
+//            {
+//                var typeMiddleware = middleware as Type;
 
-			return this;
-		}
+//                if (typeMiddleware != null)
+//                    newMiddleware = new OwinMiddleware(typeMiddleware, _logger, args);
+//                else
+//                    throw new ArgumentException("The middleware to be used needs either to be a Type or a Delegate");
+//            }
 
-		public object Build (Type returnType)
-		{
-			if (returnType == typeof(Func<IDictionary<string, object>, Task>))
-			{
-				return (Func<IDictionary<string, object>, Task>)RootMiddleware.Invoke;
-			}
-			else
-				throw new NotSupportedException("Only Func<IDictionary<string, object>, Task> is supported right now");
-		}
+//            // Update the chain of middleware
+//            if (_lastMiddleware == null)
+//                _rootMiddleware.Next = newMiddleware;
+//            else
+//                _lastMiddleware.Next = newMiddleware;
 
-		public IAppBuilder New ()
-		{
-			return new FosAppBuilder(OnAppDisposing);
-		}
+//            _lastMiddleware = newMiddleware;
 
-		public IDictionary<string, object> Properties {
-			get
-            {
-				return properties;
-			}
-		}
-	}
-}
+//            return this;
+//        }
+
+//        public object Build (Type returnType)
+//        {
+//            if (returnType == typeof(Func<IDictionary<string, object>, Task>))
+//            {
+//                return (Func<IDictionary<string, object>, Task>)_rootMiddleware.Invoke;
+//            }
+
+//            if (returnType == typeof(Func<IOwinContext, Task>))
+//            {
+//                return (Func<IOwinContext, Task>)_rootMiddleware.Invoke;
+//            }
+
+//            throw new NotSupportedException("Only Func<IDictionary<string, object>, Task> is supported right now");
+//        }
+
+//        public IAppBuilder New()
+//        {
+//            return new FosAppBuilder(OnAppDisposing, _logger);
+//        }
+
+//        public IDictionary<string, object> Properties {
+//            get
+//            {
+//                return _properties;
+//            }
+//        }
+//    }
+//}

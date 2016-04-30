@@ -1,5 +1,3 @@
-using System;
-
 namespace Fos.CustomPages
 {
 	internal interface ICustomPage

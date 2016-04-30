@@ -1,5 +1,4 @@
 using System;
-using FastCgiNet;
 using System.Net.Sockets;
 
 namespace Fos.Logging
@@ -21,7 +20,7 @@ namespace Fos.Logging
 		void ServerStop();
 
 		void LogConnectionReceived(Socket createdSocket);
-		
+
 		/// <summary>
 		/// Some times the connection is closed abruptly. For those cases, this method is called to log this occurrence.
 		/// Be aware that sometimes <paramref name="req"/>'s members can be null or in invalid state, depending on the amount of data the server received before 
@@ -30,10 +29,12 @@ namespace Fos.Logging
 		/// <param name="s">The socket that was closed abruptly.</param>
 		/// <param name="req">The request info we had obtained so far. You should null check this object's members. The object itself will never be null.</param>
 		void LogConnectionClosedAbruptly(Socket s, RequestInfo req);
-		
+
 		void LogConnectionEndedNormally(Socket s, RequestInfo req);
 		void LogApplicationError(Exception e, RequestInfo req);
 		void LogServerError(Exception e, string format, params object[] prms);
 		void LogSocketError(Socket s, Exception e, string format, params object[] prms);
+
+		void Debug(string messageTemplate, params object[] prms);
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using FastCgiNet;
-using Fos;
 using System.Net.Sockets;
 
 namespace Fos.Listener

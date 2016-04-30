@@ -71,6 +71,15 @@ namespace Fos.Logging
                 logger.ServerStart();
         }
 
+        public void Debug(string messageTemplate, params object[] prms)
+        {
+            foreach (var logger in Loggers)
+            {
+                logger.Debug(messageTemplate, prms);
+            }
+
+        }
+
         public CompositeServerLogger()
         {
             Loggers = new LinkedList<IServerLogger>();

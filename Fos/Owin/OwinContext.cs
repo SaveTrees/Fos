@@ -2,7 +2,6 @@ using System;
 using FastCgiNet;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Threading;
 using FastCgiNet.Streams;
 

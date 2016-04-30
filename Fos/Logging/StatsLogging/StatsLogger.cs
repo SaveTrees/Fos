@@ -299,6 +299,11 @@ namespace Fos.Logging
 			//throw new NotImplementedException ();
 		}
 
+		public void Debug(string messageTemplate, params object[] prms)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void LogInvalidRecordReceived(RecordBase invalidRecord)
 		{
 			//throw new NotImplementedException ();

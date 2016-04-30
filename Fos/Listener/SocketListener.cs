@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using FastCgiNet;
 using Fos.Logging;
@@ -230,18 +229,20 @@ namespace Fos.Listener
 			tcpListenSocket.Bind(new IPEndPoint(addr, port));
 		}
 
-#if __MonoCS__
 		/// <summary>
 		/// Defines the unix socket path to listen on. The socket file can't exist before this method is called and Fos's process has to have
         /// permissions to remove the file when the server is stopped.
 		/// </summary>
 		public void Bind(string socketPath)
 		{
-            unixSocketFilePath = socketPath;
+//#if __MonoCS__
+			
+			unixSocketFilePath = socketPath;
 			var endpoint = new Mono.Unix.UnixEndPoint(socketPath);
 			unixListenSocket.Bind (endpoint);
+			
+//#endif
 		}
-#endif
 
 		/// <summary>
 		/// Start this FastCgi application. Set <paramref name="background"/> to true to start this without blocking.
