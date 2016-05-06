@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,7 +34,6 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Posix" />
     <Reference Include="FastCgiNet">
       <HintPath>..\packages\FastCgiNet.0.1.0\lib\net40\FastCgiNet.dll</HintPath>
     </Reference>
@@ -68,15 +67,10 @@
     <Compile Include="Streams\NonEndingStdoutSocketStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Middleware\" />
-    <Folder Include="Owin\" />
-    <Folder Include="Logging\" />
-    <Folder Include="CustomPages\" />
-    <Folder Include="Logging\StatsLogging\" />
-    <Folder Include="Streams\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
 </Project>
