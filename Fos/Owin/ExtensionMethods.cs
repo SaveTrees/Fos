@@ -20,12 +20,12 @@ namespace Fos.Owin
 		/// <remarks>You can use <see cref="Fos.Owin.ShuntMiddleware"/> to shunt requests to a certain path to a different <see cref="IAppBuilder"/> to serve the statistics page.</remarks>
 		public static IAppBuilder UseStatisticsLogging(this IAppBuilder builder, FosSelfHost server, TimeSpan aggregationInterval)
         {
-            if (builder is FosAppBuilder2 == false)
+            if (builder is FosAppBuilder == false)
                 throw new ArgumentException("The IAppBuilder must be the Fos's Application Builder implementation. Don't use this extension method with a different Owin Server implementation");
 			if (server == null)
 				throw new ArgumentNullException("server");
 
-			var fosBuilder = (FosAppBuilder2)builder;
+			var fosBuilder = (FosAppBuilder)builder;
             var logger = new Logging.StatsLogger(aggregationInterval);
             server.StatisticsLogger = logger;
             fosBuilder.Use<Logging.StatsPageMiddleware>(logger);

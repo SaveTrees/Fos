@@ -82,7 +82,7 @@
     <Compile Include="Middleware\PageNotFoundMiddleware.cs" />
     <Compile Include="Owin\ExtensionMethods.cs" />
     <Compile Include="Logging\NullLogger.cs" />
-    <Compile Include="Owin\FosAppBuilder2.cs" />
+    <Compile Include="Owin\FosAppBuilder.cs" />
     <Compile Include="Owin\OwinContext.cs" />
     <Compile Include="FosSelfHost.cs" />
     <Compile Include="CustomPages\EmptyResponsePage.cs" />
@@ -98,7 +98,6 @@
     <Compile Include="Logging\StatsLogging\ApplicationError.cs" />
     <Compile Include="Logging\StatsLogging\StatsLogger.cs" />
     <Compile Include="Logging\StatsLogging\StatsPageMiddleware.cs" />
-    <Compile Include="Owin\FosAppBuilder.cs" />
     <Compile Include="Middleware\FosOwinRoot.cs" />
     <Compile Include="SocketHelper.cs" />
     <Compile Include="Streams\FosStdoutStream.cs" />

@@ -17,7 +17,7 @@ namespace Fos
     /// </summary>
     public class FosSelfHost : SocketListener
     {
-        private FosAppBuilder2 AppBuilder;
+        private FosAppBuilder AppBuilder;
         private OwinHandler OwinPipelineEntry;
         private Action<IAppBuilder> ApplicationConfigure;
         private CancellationTokenSource OnAppDisposal;
@@ -66,7 +66,7 @@ namespace Fos
             if (logger != null)
                 base.SetLogger(logger);
 
-            AppBuilder = new FosAppBuilder2(OnAppDisposal.Token, logger);
+            AppBuilder = new FosAppBuilder(OnAppDisposal.Token, logger);
 
             // Configure the application and build our pipeline entry. This must happen BEFORE BUILDING THE LOGGER
             ApplicationConfigure(AppBuilder);

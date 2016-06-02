@@ -164,15 +164,23 @@ namespace Fos.Owin
                 Set("owin.RequestPathBase", string.Empty);
                 Set("owin.RequestPath", nameValuePair.Value);
             }
-			
-			// HTTP_* parameters (these represent the http request header), such as:
-			// HTTP_CONNECTION: keep-alive
-			// HTTP_ACCEPT: text/html... etc.
-			// HTTP_USER_AGENT: Mozilla/5.0
-			// HTTP_ACCEPT_ENCODING
-			// HTTP_ACCEPT_LANGUAGE
-			// HTTP_COOKIE
-			// many others..
+            else if (nvpName == "REMOTE_ADDR")
+            {
+                Set("server.RemoteIpAddress", nameValuePair.Value);
+            }
+            else if (nvpName == "REMOTE_PORT")
+            {
+                Set("server.RemotePort", nameValuePair.Value);
+            }
+
+            // HTTP_* parameters (these represent the http request header), such as:
+            // HTTP_CONNECTION: keep-alive
+            // HTTP_ACCEPT: text/html... etc.
+            // HTTP_USER_AGENT: Mozilla/5.0
+            // HTTP_ACCEPT_ENCODING
+            // HTTP_ACCEPT_LANGUAGE
+            // HTTP_COOKIE
+            // many others..
             else if (nvpName.StartsWith("HTTP_"))
             {
                 //TODO: Avoid creating strings and create a decent algorithm for this conversion
