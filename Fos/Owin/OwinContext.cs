@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using FastCgiNet.Streams;
+using SaveTrees.Logging;
 
 namespace Fos.Owin
 {
@@ -127,7 +128,13 @@ namespace Fos.Owin
 
 		public T Get<T>(string key)
 		{
-			return (T)this[key];
+            object value;
+            if (!TryGetValue(key, out value))
+            {
+                return default(T);
+            }
+
+            return (T)value;
 		}
 
 		public void SetRequestHeader(string headerName, string headerValue)
@@ -173,6 +180,16 @@ namespace Fos.Owin
                 Set("server.RemotePort", nameValuePair.Value);
             }
 
+            // WebSocket
+            else if (nvpName == "WS_VERSION")
+            {
+                var serverCapabilities = Get<IDictionary<string, object>>("server.Capabilities") ?? new Dictionary<string, object>();
+                serverCapabilities["websocket.Version"] = nameValuePair.Value;
+                Set("server.Capabilities", serverCapabilities);
+            }
+
+            //Action<IDictionary<string, object>, WebSocketFunc>
+
             // HTTP_* parameters (these represent the http request header), such as:
             // HTTP_CONNECTION: keep-alive
             // HTTP_ACCEPT: text/html... etc.
@@ -200,7 +217,12 @@ namespace Fos.Owin
                     ++i;
                 }
 
-                SetRequestHeader(builder.ToString(), nameValuePair.Value);
+                var headerName = builder.ToString();
+                if (headerName.StartsWith("Sec"))
+                {
+                    Log.CurrentLogger.Debug()("Sec: {headerName}, {value}", headerName, nameValuePair.Value);
+                }
+                SetRequestHeader(headerName, nameValuePair.Value);
             }
 		}
 
