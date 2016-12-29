@@ -10,7 +10,7 @@
 	using SaveTrees.Logging;
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	internal class TypedMiddlewareBuilder : MiddlewareBuilder
 	{
@@ -60,11 +60,7 @@
 								   .All(b => b));
 
 				var ctorArgs = new object[ctor.GetParameters().Length];
-				object middlewareInstance = Next == null
-					? null
-					: Next.InvokeHandler;
-
-				ctorArgs[0] = middlewareInstance;
+				ctorArgs[0] = Next?.InvokeHandler;
 				Array.Copy(_args, 0, ctorArgs, 1, ctorArgs.Length - 1);
 
 				var middleware = ctor.Invoke(ctorArgs);
